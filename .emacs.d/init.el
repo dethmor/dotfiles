@@ -302,7 +302,7 @@
          ("C-c r" . my/org-capture-ril)
          ("C-c w" . my/org-capture-wasted))
   :init
-  (setq org-directory (locate-user-emacs-file "org"))
+  (setq org-directory (expand-file-name "~/org"))
   (unless (file-directory-p org-directory)
     (make-directory org-directory))
   (defun my/org-capture-insert (content)
