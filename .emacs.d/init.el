@@ -415,8 +415,8 @@
   (whitespace-mode t))
 
 (use-package xclip
-  :if (and (string-equal system-type "gnu/linux")
-           (executable-find "xclip"))
+  ;; :if (and (string-equal system-type "gnu/linux")
+  ;;          (executable-find "xclip"))
   :ensure t
   :init
   (xclip-mode))
