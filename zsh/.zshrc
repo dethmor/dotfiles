@@ -188,8 +188,14 @@ fi
 
         export NNN_PLUG='f:finder;p:preview-tui'
 
-        if (( $+commands[trash] || $+commands[gio] )); then
+        if (( $+commands[trash] )); then
             export NNN_TRASH=1
+            if (( ! $+commands[trash-put] )); then
+                alias trash-put='trash'
+            fi
+        fi
+        if (( $+commands[gio] )); then
+            export NNN_TRASH=2
         fi
     fi
 }
