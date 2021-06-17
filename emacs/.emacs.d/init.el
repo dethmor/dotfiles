@@ -215,7 +215,8 @@
 
 (use-package highlight-indentation
   :ensure t
-  :hook ((prog-mode . highlight-indentation-mode)
+  :hook (
+         ;; (prog-mode . highlight-indentation-mode)
          (yaml-mode . highlight-indentation-mode)))
 
 ;; (use-package http
