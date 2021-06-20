@@ -180,7 +180,8 @@ fi
             export GUI=1
         fi
 
-        NNN_BMS="M:$HOME/.config/nnn/mounts"
+        #typeset -TU NNN_BMS nnn_bms ';'
+        NNN_BMS="c:$HOME/.config/nnn/mounts;M:/mnt"
         if [[ -d /media ]]; then
             NNN_BMS="m:/media;$NNN_BMS"
         fi
