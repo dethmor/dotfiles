@@ -278,6 +278,10 @@
 ;;   (lsp-ui-doc-max-height 30)
 ;;   (lsp-ui-peek-enable t))
 
+(use-package lua-mode
+  :ensure t
+  :mode ("\\.lua\\'"))
+
 ;; (use-package magit
 ;;   :ensure t)
 
