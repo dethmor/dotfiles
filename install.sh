@@ -9,4 +9,12 @@ if [[ ! "$0" =~ install.sh$ ]]; then
 fi
 
 
+if [[ "$OSTYPE" =~ darwin* ]]; then
+    if type brew &>/dev/null; then
+        curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash
+    fi
+    brew bundle --file="$HOME/dofiles/Brewfile"
+fi
+
+
 bash "$HOME/dotfiles/sync.sh"

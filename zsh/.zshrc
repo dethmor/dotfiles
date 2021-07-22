@@ -32,8 +32,9 @@
         # a plugin for finding z abbreviations
         Mellbourn/zabb
 
-        #
+        # Autoenv for zsh
         Tarrasch/zsh-autoenv
+
 EOBUNDLES
 
     antigen apply
@@ -45,7 +46,7 @@ EOBUNDLES
     zstyle ':filter-select' case-incensitive yes
     zstyle ':filter-select' hist-find-no-dups yes
 
-    bindkey '^R' zaw-history
+    #bindkey '^R' zaw-history
     bindkey '^\^' zaw-process
     bindkey '^@' zaw-ssh-hosts
 
@@ -88,6 +89,21 @@ bindkey '^[K' delete-word
 
 
 ttyctl -f
+
+
+update_rprompt_hook() {
+    local rprompt=()
+    if [[ -n "$AWS_PROFILE" ]]; then
+        rprompt+=("[aws:$AWS_PROFILE]")
+    fi
+    if [[ -n "$KUBECONFIG" ]]; then
+        local x="${KUBECONFIG%/config}"
+        rprompt+=("[kube:${x#*/.kube.}]")
+    fi
+    RPROMPT="$rprompt[@]"
+}
+
+precmd_functions+=(update_rprompt_hook)
 
 
 urlencode() {
@@ -200,6 +216,16 @@ fi
         fi
     fi
 }
+
+
+if (( $+commands[kubectl] )); then
+    source <(kubectl completion zsh)
+fi
+
+
+if (( $+commands[gh] )); then
+    source <(gh completion -s zsh)
+fi
 
 
 if [[ ! "$TERM" =~ xterm* ]]; then
