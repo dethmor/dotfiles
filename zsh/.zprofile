@@ -1,5 +1,5 @@
 typeset -U path
-path=(~/bin(N-/) ~/.local/bin(N-/) /usr/local/bin(N-/) $path)
+path=(~/bin(N-/) ~/.local/bin(N-/) /usr/local/bin(N-/) /usr/local/sbin(N-/) $path)
 
 typeset -U fpath
 fpath=(/usr/local/share/zsh/site-functions(N-/) $fpath)

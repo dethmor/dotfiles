@@ -312,7 +312,11 @@
          ("C-c r" . my/org-capture-ril)
          ("C-c w" . my/org-capture-wasted))
   :init
-  (setq org-directory (expand-file-name "~/org"))
+  (let ((orgdir
+         (if (string-equal "darwin" system-type)
+             "~/Documents/org"
+           "~/org")))
+    (setq org-directory (expand-file-name orgdir)))
   (unless (file-directory-p org-directory)
     (make-directory org-directory))
   (defun my/org-capture-insert (content)
