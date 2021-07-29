@@ -1,5 +1,6 @@
-(setq exec-path (parse-colon-path (getenv "PATH"))
+(setq exec-path (parse-colon-path (concat (getenv "PATH") ":/usr/local/bin:/usr/local/sbin"))
       scratch-buffer-file (locate-user-emacs-file "scratch"))
+
 
 (add-hook
  'after-init-hook
@@ -8,6 +9,7 @@
       (with-current-buffer (get-buffer-create "*scratch*")
         (erase-buffer)
         (insert-file-contents scratch-buffer-file))) t))
+
 
 (add-hook
  'window-configuration-change-hook
@@ -19,15 +21,18 @@
         (set-display-table-slot display-table 5 ?│)
         (set-window-display-table (selected-window) display-table))) t))
 
+
 (add-hook
  'kill-emacs-hook
  `(lambda ()
     (with-current-buffer (get-buffer-create "*scratch*")
       (write-region (point-min) (point-max) scratch-buffer-file nil t)) t))
 
+
 (add-hook
  'after-save-hook
  'executable-make-buffer-file-executable-if-script-p)
+
 
 (add-hook
  'after-save-hook
@@ -40,6 +45,7 @@
               (locate-user-emacs-file "init.el")))
         (eval-buffer))) t))
 
+
 (add-hook
  'kill-emacs-hook
  `(lambda ()
@@ -47,6 +53,7 @@
           (elc-file (locate-user-emacs-file "init.elc")))
       (when (file-newer-than-file-p src-file elc-file)
         (byte-compile-file src-file))) t))
+
 
 (add-hook
  'kill-buffer-hook
@@ -57,11 +64,13 @@
       (rename-buffer "*scratch*<kill>" t)
       (clone-buffer "*scratch*")) t))
 
+
 (add-hook
  'kill-emacs-hook
  `(lambda ()
     (when (file-exists-p custom-file)
       (delete-file custom-file)) t))
+
 
 (custom-set-variables
  '(custom-file
@@ -70,7 +79,6 @@
  '(ffap-bindings t)
  '(find-file-visit-truename t)
  '(global-auto-revert-mode t)
-
  '(indent-tabs-mode nil)
  '(inhibit-splash-screen t)
  '(inhibit-startup-screen t)
@@ -93,10 +101,15 @@
  '(view-read-only t)
  '(viper-mode nil))
 
+
 (load-theme 'anticolor t)
+
 (defalias 'yes-or-no-p 'y-or-n-p)
+
 (put 'upcase-region 'disabled nil)
+
 (put 'downcase-region 'disabled nil)
+
 
 (require 'package)
 (add-to-list
@@ -104,15 +117,19 @@
  '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
 
+
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
+
 
 (setq use-package-verbose t
       use-package-enable-imenu-support t
       use-package-compute-statistics t)
 
+
 (require 'use-package)
+
 
 (use-package cc-mode
   :hook (c-mode-common . my/c-mode-common)
@@ -121,6 +138,7 @@
     (c-set-style "bsd")
     (setq indent-tabs-mode nil
           c-basic-offset 4)))
+
 
 (use-package company
   :ensure t
@@ -140,6 +158,7 @@
   (company-selection-wrap-around t)
   :config
   (global-company-mode t))
+
 
 (use-package company-ctags
   ;; create tags file in project root
@@ -164,7 +183,9 @@
 ;;          (typescript-mode . turn-on-ctags-auto-update-mode))
 ;;   :bind (("C-c u" . ctags-update)))
 
+
 (use-package ddskk
+  :if (not (string-equal "gnu/linux" system-type))
   :ensure t
   :bind (:map skk-j-mode-map
               ("C-M-j" . skk-undo-kakutei))
@@ -203,8 +224,10 @@
   :config
   (require 'skk-study))
 
+
 (use-package eshell
   :bind ("M-!" . eshell))
+
 
 ;; (use-package flycheck
 ;;   :ensure t)
@@ -213,14 +236,17 @@
 ;;   :if (file-exists-p (expand-file-name "~/.gnus"))
 ;;   :commands gnus)
 
+
 (use-package highlight-indentation
   :ensure t
   :hook (
          ;; (prog-mode . highlight-indentation-mode)
          (yaml-mode . highlight-indentation-mode)))
 
+
 ;; (use-package http
 ;;   :ensure t)
+
 
 (use-package ido
   :custom
@@ -229,6 +255,7 @@
   (ido-mode t)
   (ido-everywhere t))
 
+
 (use-package ido-vertical-mode
   :ensure t
   :custom
@@ -236,10 +263,12 @@
   :config
   (ido-vertical-mode t))
 
+
 (use-package smex
   :ensure t
   :bind (("M-x" . smex)
          ("M-X" . smex-major-mode-commands)))
+
 
 (use-package literate-calc-mode
   :ensure t
@@ -251,6 +280,7 @@
       (unless (eq buffer (current-buffer))
         (switch-to-buffer-other-window buffer)
         (literate-calc-mode)))))
+
 
 ;; (use-package lsp-mode
 ;;   :if (executable-find "npm")
@@ -267,6 +297,7 @@
 ;;   (lsp-document-sync-method 'incremental)
 ;;   (lsp-response-timeout 5))
 
+
 ;; (use-package lsp-ui
 ;;   :ensure t
 ;;   :hook (lsp-mode . lsp-ui-mode)
@@ -278,16 +309,27 @@
 ;;   (lsp-ui-doc-max-height 30)
 ;;   (lsp-ui-peek-enable t))
 
+
 (use-package lua-mode
   :ensure t
   :mode ("\\.lua\\'"))
 
+
 ;; (use-package magit
 ;;   :ensure t)
+
+
+(use-package markdown-preview-mode
+  :ensure t
+  :mode ("\\.md\\'")
+  :custom
+  (markdown-preview-stylesheets (list "github.css")))
+
 
 (use-package multiple-cursors
   :ensure t
   :bind (("C-c C-c" . mc/edit-lines)))
+
 
 (use-package open-junk-file
   :ensure t
@@ -304,6 +346,7 @@
   (unless (file-directory-p my/open-junk-file-directory)
     (make-directory my/open-junk-file-directory))
   (setq open-junk-file-format (format "%s/%%s." my/open-junk-file-directory)))
+
 
 (use-package org-mode
   :commands (org-capture org-mode)
@@ -345,9 +388,11 @@
       (file+headline org-default-notes-file "Wasted")
       "|%<%F>|%?|"))))
 
+
 (use-package package-utils
   :defer t
   :ensure t)
+
 
 (use-package password-store
   :ensure t
@@ -355,9 +400,11 @@
   :custom
   (pass-username-fallback-on-filename t))
 
+
 (use-package password-store-otp
   :ensure t
   :commands (password-store-otp-token-copy))
+
 
 (use-package pkgbuild-mode
   :if (executable-find "makepkg")
@@ -367,6 +414,7 @@
   (pkgbuild-makepkg-command "makepkg -m -C -c -f ")
   (pkgbuild-user-full-name "T.T.")
   (pkgbuild-user-mail-address "dt@8b.nz"))
+
 
 (use-package popwin
   :ensure t
@@ -388,6 +436,7 @@
      ("*eshell*")
      ("*use-package statistics*"))))
 
+
 (use-package recentf
   :hook ((find-file . recentf-mode)
          (kill-buffer . my/recentf-push))
@@ -402,12 +451,15 @@
   (recentf-auto-ceanup 'never)
   (recentf-auto-save-timer (run-with-idle-timer 30 t 'recentf-save-list)))
 
+
 (use-package shell-script-mode
   :mode ("\\.sh\\'"))
+
 
 (use-package typescript-mode
   :ensure t
   :mode "\\.tsx?\\'")
+
 
 (use-package visible-mark
   :ensure t
@@ -415,6 +467,7 @@
   (global-visible-mark-mode t)
   :custom
   (set-mark-command-repeat-pop t))
+
 
 (use-package wihitespace
   :hook (before-save . whitespace-cleanup)
@@ -428,6 +481,7 @@
   :config
   (whitespace-mode t))
 
+
 (use-package xclip
   :if (or (executable-find "xclip")
           (executable-find "xsel")
@@ -436,8 +490,10 @@
   :init
   (xclip-mode))
 
+
 (use-package yaml-mode
   :ensure t
   :mode ("\\.yaml\\'" "\\.yml\\'"))
+
 
 ;; init.el ends here
