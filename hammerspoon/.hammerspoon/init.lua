@@ -32,9 +32,6 @@ local keys = {
    { {"cmd", "ctrl", "shift"}, "J",      resize(  0,  20) },
    { {"cmd", "ctrl", "shift"}, "K",      resize(  0, -20) },
    { {"cmd", "ctrl", "shift"}, "L",      resize( 20,   0) },
-
-   -- launch terminal
-   { {"cmd"},                  "Return", run("Terminal") },
 }
 
 

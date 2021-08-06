@@ -1,5 +1,7 @@
 (setq exec-path (parse-colon-path (concat (getenv "PATH") ":/usr/local/bin:/usr/local/sbin"))
-      scratch-buffer-file (locate-user-emacs-file "scratch"))
+      scratch-buffer-file (locate-user-emacs-file "scratch")
+      default-directory "~/"
+      command-line-default-directory "~/")
 
 
 (add-hook
@@ -112,9 +114,6 @@
 (put 'downcase-region 'disabled nil)
 
 
-(set-laungage-environment "Japanese")
-
-
 (require 'package)
 (add-to-list
  'package-archives
@@ -189,7 +188,6 @@
 
 
 (use-package ddskk
-  :if (not (string-equal "gnu/linux" system-type))
   :ensure t
   :bind (:map skk-j-mode-map
               ("C-M-j" . skk-undo-kakutei))
@@ -487,12 +485,9 @@
 
 
 (use-package xclip
-  :if (or (executable-find "xclip")
-          (executable-find "xsel")
-          (executable-find "pbcopy"))
   :ensure t
   :init
-  (xclip-mode))
+  (xclip-mode t))
 
 
 (use-package yaml-mode
