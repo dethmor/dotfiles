@@ -22,16 +22,16 @@ end
 
 local keys = {
    -- move
-   { {"cmd", "shift"},         "H",      move(-20,   0) },
-   { {"cmd", "shift"},         "J",      move(  0,  20) },
-   { {"cmd", "shift"},         "K",      move(  0, -20) },
-   { {"cmd", "shift"},         "L",      move( 20,   0) },
+   { {"cmd", "shift"},         "H",      move(-40,   0) },
+   { {"cmd", "shift"},         "J",      move(  0,  40) },
+   { {"cmd", "shift"},         "K",      move(  0, -40) },
+   { {"cmd", "shift"},         "L",      move( 40,   0) },
 
    -- resize
-   { {"cmd", "ctrl", "shift"}, "H",      resize(-20,   0) },
-   { {"cmd", "ctrl", "shift"}, "J",      resize(  0,  20) },
-   { {"cmd", "ctrl", "shift"}, "K",      resize(  0, -20) },
-   { {"cmd", "ctrl", "shift"}, "L",      resize( 20,   0) },
+   { {"cmd", "ctrl", "shift"}, "H",      resize(-40,   0) },
+   { {"cmd", "ctrl", "shift"}, "J",      resize(  0,  40) },
+   { {"cmd", "ctrl", "shift"}, "K",      resize(  0, -40) },
+   { {"cmd", "ctrl", "shift"}, "L",      resize( 40,   0) },
 }
 
 
