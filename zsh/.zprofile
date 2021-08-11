@@ -1,7 +1,7 @@
-typeset -U path
+typeset -Ug path
 path=(~/bin(N-/) ~/.local/bin(N-/) /usr/local/bin(N-/) /usr/local/sbin(N-/) $path)
 
-typeset -U fpath
+typeset -Ug fpath
 fpath=(/usr/local/share/zsh/site-functions(N-/) $fpath)
 
 
