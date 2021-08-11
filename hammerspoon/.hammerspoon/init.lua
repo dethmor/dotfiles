@@ -1,37 +1,125 @@
-local function move(x, y)
+WEST  = 1 << 0
+EAST  = 1 << 1
+NORTH = 1 << 2
+SOUTH = 1 << 3
+
+
+local function movestep(f)
    return function()
       local win = hs.window.focusedWindow()
-      local f = win:frame()
-      f.x = f.x + x
-      f.y = f.y + y
-      win:setFrame(f)
+      local frm = win:frame()
+      local px = 50
+      if (f == WEST)  then frm.x = frm.x - px end
+      if (f == EAST)  then frm.x = frm.x + px end
+      if (f == NORTH) then frm.y = frm.y - px end
+      if (f == SOUTH) then frm.y = frm.y + px end
+      win:setFrame(frm)
    end
 end
 
 
-local function resize(w, h)
+local function resizestep(f)
    return function()
       local win = hs.window.focusedWindow()
-      local f = win:frame()
-      f.w = f.w + w
-      f.h = f.h + h
-      win:setFrame(f)
+      local frm = win:frame()
+      local px = 50
+      if (f == WEST)  then frm.w = frm.w - px end
+      if (f == EAST)  then frm.w = frm.w + px end
+      if (f == NORTH) then frm.h = frm.h - px end
+      if (f == SOUTH) then frm.h = frm.h + px end
+      win:setFrame(frm)
    end
 end
+
+
+local function center()
+   return function()
+      hs.window.focusedWindow():centerOnScreen()
+   end
+end
+
+
+local function teleport(f)
+   return function()
+      local win = hs.window.focusedWindow()
+      local frm = win:frame()
+      local scr = win:screen():frame()
+      if (f == WEST)  then frm.x = 0 end
+      if (f == EAST)  then frm.x = scr.w - frm.w end
+      if (f == NORTH) then frm.y = 0 end
+      if (f == SOUTH) then frm.y = scr.h - frm.h end
+      print(f)
+      win:setFrame(frm)
+   end
+end
+
+
+local function snap(f)
+   return function()
+      local win = hs.window.focusedWindow()
+      local frm = win:frame()
+      local scr = win:screen():frame()
+      if (f == WEST) then
+         frm.x = 0
+         frm.y = 0
+         frm.w = scr.w * 0.5
+         frm.h = scr.h
+      end
+      if (f == EAST) then
+         frm.x = scr.w * 0.5
+         frm.y = 0
+         frm.w = scr.w * 0.5
+         frm.h = scr.h
+      end
+      if (f == NORTH) then
+         frm.x = 0
+         frm.y = 0
+         frm.w = scr.w
+         frm.h = scr.h * 0.5
+      end
+      if (f == SOUTH) then
+         frm.x = 0
+         frm.y = scr.h * 0.5
+         frm.w = scr.w
+         frm.h = scr.h * 0.5
+      end
+      win:setFrame(frm)
+   end
+end
+
+local function run(app)
+   return function()
+      hs.application.open(app)
+   end
+end
+
+hs.application.enableSpotlightForNameSearches(true)
 
 
 local keys = {
-   -- move
-   { {"cmd", "shift"},         "H",      move(-40,   0) },
-   { {"cmd", "shift"},         "J",      move(  0,  40) },
-   { {"cmd", "shift"},         "K",      move(  0, -40) },
-   { {"cmd", "shift"},         "L",      move( 40,   0) },
+   { {"cmd", "shift"},         "H",      movestep(WEST) },
+   { {"cmd", "shift"},         "L",      movestep(EAST) },
+   { {"cmd", "shift"},         "K",      movestep(NORTH) },
+   { {"cmd", "shift"},         "J",      movestep(SOUTH) },
 
-   -- resize
-   { {"cmd", "ctrl", "shift"}, "H",      resize(-40,   0) },
-   { {"cmd", "ctrl", "shift"}, "J",      resize(  0,  40) },
-   { {"cmd", "ctrl", "shift"}, "K",      resize(  0, -40) },
-   { {"cmd", "ctrl", "shift"}, "L",      resize( 40,   0) },
+   { {"cmd", "shift", "ctrl"}, "H",      resizestep(WEST) },
+   { {"cmd", "shift", "ctrl"}, "L",      resizestep(EAST) },
+   { {"cmd", "shift", "ctrl"}, "K",      resizestep(NORTH) },
+   { {"cmd", "shift", "ctrl"}, "J",      resizestep(SOUTH) },
+
+   { {"cmd", "shift"},         "G",      center() },
+
+   { {"cmd", "shift"},         "Y",      teleport(WEST) },
+   { {"cmd", "shift"},         "U",      teleport(EAST) },
+   { {"cmd", "shift"},         "M",      teleport(NORTH) },
+   { {"cmd", "shift"},         "N",      teleport(SOUTH) },
+
+   { {"cmd", "shift", "ctrl"}, "Y",      snap(WEST) },
+   { {"cmd", "shift", "ctrl"}, "U",      snap(EAST) },
+   { {"cmd", "shift", "ctrl"}, "M",      snap(NORTH) },
+   { {"cmd", "shift", "ctrl"}, "N",      snap(SOUTH) },
+
+   { {"cmd", "shift"},         "Return", run("Terminal.app") },
 }
 
 
