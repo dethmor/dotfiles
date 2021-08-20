@@ -87,39 +87,41 @@ local function snap(f)
    end
 end
 
-local function run(app)
+
+local function start(hint)
    return function()
-      hs.application.open(app)
+      hs.application.launchOrFocus(hint)
    end
 end
+
 
 hs.application.enableSpotlightForNameSearches(true)
 
 
 local keys = {
-   { {"cmd", "shift"},         "H",      movestep(WEST) },
-   { {"cmd", "shift"},         "L",      movestep(EAST) },
-   { {"cmd", "shift"},         "K",      movestep(NORTH) },
-   { {"cmd", "shift"},         "J",      movestep(SOUTH) },
+   { {"ctrl", "alt"},          "H",     movestep(WEST) },
+   { {"ctrl", "alt"},          "L",     movestep(EAST) },
+   { {"ctrl", "alt"},          "K",     movestep(NORTH) },
+   { {"ctrl", "alt"},          "J",     movestep(SOUTH) },
 
-   { {"cmd", "shift", "ctrl"}, "H",      resizestep(WEST) },
-   { {"cmd", "shift", "ctrl"}, "L",      resizestep(EAST) },
-   { {"cmd", "shift", "ctrl"}, "K",      resizestep(NORTH) },
-   { {"cmd", "shift", "ctrl"}, "J",      resizestep(SOUTH) },
+   { {"ctrl", "alt"},          "LEFT",  resizestep(WEST) },
+   { {"ctrl", "alt"},          "RIGHT", resizestep(EAST) },
+   { {"ctrl", "alt"},          "UP",    resizestep(NORTH) },
+   { {"ctrl", "alt"},          "DOWN",  resizestep(SOUTH) },
 
-   { {"cmd", "shift"},         "G",      center() },
+   { {"ctrl", "alt"},          "G",     center() },
 
-   { {"cmd", "shift"},         "Y",      teleport(WEST) },
-   { {"cmd", "shift"},         "U",      teleport(EAST) },
-   { {"cmd", "shift"},         "M",      teleport(NORTH) },
-   { {"cmd", "shift"},         "N",      teleport(SOUTH) },
+   { {"ctrl", "alt", "shift"}, "H",     teleport(WEST) },
+   { {"ctrl", "alt", "shift"}, "L",     teleport(EAST) },
+   { {"ctrl", "alt", "shift"}, "K",     teleport(NORTH) },
+   { {"ctrl", "alt", "shift"}, "J",     teleport(SOUTH) },
 
-   { {"cmd", "shift", "ctrl"}, "Y",      snap(WEST) },
-   { {"cmd", "shift", "ctrl"}, "U",      snap(EAST) },
-   { {"cmd", "shift", "ctrl"}, "M",      snap(NORTH) },
-   { {"cmd", "shift", "ctrl"}, "N",      snap(SOUTH) },
+   { {"ctrl", "alt", "shift"}, "LEFT",  snap(WEST) },
+   { {"ctrl", "alt", "shift"}, "RIGHT", snap(EAST) },
+   { {"ctrl", "alt", "shift"}, "UP",    snap(NORTH) },
+   { {"ctrl", "alt", "shift"}, "DOWN",  snap(SOUTH) },
 
-   { {"cmd", "shift"},         "Return", run("Terminal.app") },
+   { {"cmd"},                  "`",     start("Terminal.app") },
 }
 
 
