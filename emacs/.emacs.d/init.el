@@ -114,6 +114,10 @@
 (put 'downcase-region 'disabled nil)
 
 
+(when (string-equal system-type "darwin")
+  (set-language-environment 'Japanese))
+
+
 (require 'package)
 (add-to-list
  'package-archives
