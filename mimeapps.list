@@ -1,0 +1,7 @@
+[Default Applications]
+application/octet-stream=mpv.desktop
+image/jpeg=sxiv.desktop
+image/png=sxiv.desktop
+image/gif=mpv.desktop
+
+[Added Associations]
